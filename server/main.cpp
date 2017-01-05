@@ -27,7 +27,7 @@ int main()
 		int op = j["op"].get<int>();
 		switch(op)
 		{
-			case 1: 
+      case 1: 
       { // Create client
 				CClient* pClient = new CClient;
 				pClient->SetNickname(j["data"]["name"].getAsString());
@@ -37,7 +37,7 @@ int main()
         ws.send(j.dump().c_str(), code);
 				break;
       }
-			case 2: 
+      case 2: 
       { // Join channel
 				CChannel* pChannel = (CChannel*)entities[j["data"]["channel_id"].getAsString()];
 				CClient* pClient = (CClient*)entities[j["data"]["client_id"].getAsString()];
@@ -54,7 +54,7 @@ int main()
         break;
       }
       case 3: 
-        { // Create channel
+      { // Create channel
         CChannel* pChannel = new CChannel;
         pChannel->SetDescription(j["data"]["description"].getAsString());
         pChannel->SetName(j["data"]["name"].getAsString());
