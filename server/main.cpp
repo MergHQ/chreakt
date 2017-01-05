@@ -15,32 +15,32 @@ void CreateResponse(std::string status, std::string message, int op, nlohmann::j
 
 int main()
 {
-	CWebSocketServer server;
-	nlohmann::json j;
+  CWebSocketServer server;
+  nlohmann::json j;
 
-	server.OnConnection([](uWS::WebSocket<true> ws, uWS::UpgradeInfo handler) {
-		printf("NEW CLIENT \n");
-	});
+  server.OnConnection([](uWS::WebSocket<true> ws, uWS::UpgradeInfo handler) {
+    printf("NEW CLIENT \n");
+  });
 
-	server.OnMessage([&](uWS::WebSocket<uWS::SERVER> ws, std::string message, uWS::OpCode code) {
-		nlohmann::json j = nlohmann::json::parse(message.c_str());
-		int op = j["op"].get<int>();
+  server.OnMessage([&](uWS::WebSocket<uWS::SERVER> ws, std::string message, uWS::OpCode code) {
+    nlohmann::json j = nlohmann::json::parse(message.c_str());
+    int op = j["op"].get<int>();
     switch(op)
     {
       case 1: 
       { // Create client
-				CClient* pClient = new CClient;
-				pClient->SetNickname(j["data"]["name"].getAsString());
-				entities[pClient->GetSnowflake()] = pClient;
+        CClient* pClient = new CClient;
+        pClient->SetNickname(j["data"]["name"].getAsString());
+        entities[pClient->GetSnowflake()] = pClient;
         j["data"]["client_id"] = pClient->GetSnowflake();
         CreateResponse("Ok", "", 10, j);
         ws.send(j.dump().c_str(), code);
-				break;
+        break;
       }
       case 2: 
       { // Join channel
-				CChannel* pChannel = (CChannel*)entities[j["data"]["channel_id"].getAsString()];
-				CClient* pClient = (CClient*)entities[j["data"]["client_id"].getAsString()];
+        CChannel* pChannel = (CChannel*)entities[j["data"]["channel_id"].getAsString()];
+        CClient* pClient = (CClient*)entities[j["data"]["client_id"].getAsString()];
         if (pChannel && pClient)
         {
           pChannel->AddClient(pClient, ws.getPollHandle());
@@ -68,7 +68,7 @@ int main()
     }
   });
 
-	server.Start(3000);
+  server.Start(3000);
 
   // Clean up
   for (std::pair<std::string, IEntity*> p : entities)
