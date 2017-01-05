@@ -29,21 +29,21 @@ int main()
 		{
 			case 1: 
       { // Create client
-				CClient* client = new CClient;
-				client->SetNickname(j["data"]["name"].getAsString());
-				entities[client->GetSnowflake()] = client;
-        j["data"]["client_id"] = client->GetSnowflake();
+				CClient* pClient = new CClient;
+				pClient->SetNickname(j["data"]["name"].getAsString());
+				entities[pClient->GetSnowflake()] = pClient;
+        j["data"]["client_id"] = pClient->GetSnowflake();
         CreateResponse("Ok", "", 10, j);
         ws.send(j.dump().c_str(), code);
 				break;
 			}
 			case 2: 
       { // Join channel
-				CChannel* channel = (CChannel*)entities[j["data"]["channel_id"].getAsString()];
-				CClient* client = (CClient*)entities[j["data"]["client_id"].getAsString()];
-        if (channel && client)
+				CChannel* pChannel = (CChannel*)entities[j["data"]["channel_id"].getAsString()];
+				CClient* pClient = (CClient*)entities[j["data"]["client_id"].getAsString()];
+        if (pChannel && pClient)
         {
-          channel->AddClient(client, ws.getPollHandle());
+          pChannel->AddClient(pClient, ws.getPollHandle());
           CreateResponse("Ok", "", 20, j);
           ws.send(j.dump().c_str(), code);
           break;
@@ -55,12 +55,12 @@ int main()
 			}
       case 3: 
       { // Create channel
-        CChannel* channel = new CChannel;
-        channel->SetDescription(j["data"]["description"].getAsString());
-        channel->SetName(j["data"]["name"].getAsString());
-        channel->Init(server);
-        entities[channel->GetSnowflake()] = channel;
-        j["data"]["channel_id"] = channel->GetSnowflake();
+        CChannel* pChannel = new CChannel;
+        pChannel->SetDescription(j["data"]["description"].getAsString());
+        pChannel->SetName(j["data"]["name"].getAsString());
+        pChannel->Init(server);
+        entities[pChannel->GetSnowflake()] = pChannel;
+        j["data"]["channel_id"] = pChannel->GetSnowflake();
         CreateResponse("Ok", "", 30, j);
         ws.send(j.dump().c_str(), code);
         break;
