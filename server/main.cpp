@@ -25,8 +25,8 @@ int main()
 	server.OnMessage([&](uWS::WebSocket<uWS::SERVER> ws, std::string message, uWS::OpCode code) {
 		nlohmann::json j = nlohmann::json::parse(message.c_str());
 		int op = j["op"].get<int>();
-		switch(op)
-		{
+    switch(op)
+    {
       case 1: 
       { // Create client
 				CClient* pClient = new CClient;
