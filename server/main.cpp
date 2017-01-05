@@ -36,7 +36,7 @@ int main()
         CreateResponse("Ok", "", 10, j);
         ws.send(j.dump().c_str(), code);
 				break;
-			}
+      }
 			case 2: 
       { // Join channel
 				CChannel* pChannel = (CChannel*)entities[j["data"]["channel_id"].getAsString()];
@@ -52,9 +52,9 @@ int main()
         CreateResponse("Error", "Invalid client or channel", 20, error);
         ws.send(error.dump().c_str(), code);
         break;
-			}
+      }
       case 3: 
-      { // Create channel
+        { // Create channel
         CChannel* pChannel = new CChannel;
         pChannel->SetDescription(j["data"]["description"].getAsString());
         pChannel->SetName(j["data"]["name"].getAsString());
@@ -65,8 +65,8 @@ int main()
         ws.send(j.dump().c_str(), code);
         break;
       }
-		}
-	});
+    }
+  });
 
 	server.Start(3000);
 
